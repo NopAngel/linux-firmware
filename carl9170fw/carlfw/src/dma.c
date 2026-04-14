@@ -32,7 +32,8 @@ struct ar9170_dma_memory dma_mem __section(sram);
 static void copy_dma_desc(struct dma_desc *dst,
 			  struct dma_desc *src)
 {
-	memcpy(dst, src, sizeof(struct dma_desc));
+	memcpy(dst, src, 
+		sizeof(struct dma_desc));
 }
 
 static void clear_descriptor(struct dma_desc *d)
@@ -88,10 +89,10 @@ void dma_init_descriptors(void)
 	fw.usb.int_desc = &dma_mem.terminator[i++];
 	fw.wlan.fw_desc = &dma_mem.terminator[i++];
 
-#ifdef CONFIG_CARL9170FW_CAB_QUEUE
-	for (j = 0; j < CARL9170_INTF_NUM; j++)
-		init_queue(&fw.wlan.cab_queue[j], &dma_mem.terminator[i++]);
-#endif /* CONFIG_CARL9170FW_CAB_QUEUE */
+	#ifdef CONFIG_CARL9170FW_CAB_QUEUE
+		for (j = 0; j < CARL9170_INTF_NUM; j++)
+			init_queue(&fw.wlan.cab_queue[j], &dma_mem.terminator[i++]);
+	#endif /* CONFIG_CARL9170FW_CAB_QUEUE */
 
 	BUG_ON(AR9170_TERMINATOR_NUMBER != i);
 
@@ -100,7 +101,8 @@ void dma_init_descriptors(void)
 	    AR9170_RX_BLOCK_NUMBER, AR9170_TERMINATOR_NUMBER, i);
 
 	/* Init descriptors and memory blocks */
-	for (i = 0; i < AR9170_BLOCK_NUMBER; i++) {
+	for (i = 0; i < AR9170_BLOCK_NUMBER; i++) 
+	{
 		fill_descriptor(&dma_mem.block[i], AR9170_BLOCK_SIZE, dma_mem.data[i].data);
 
 		if (i < AR9170_TX_BLOCK_NUMBER)
@@ -198,7 +200,8 @@ void dma_put(struct dma_queue *q, struct dma_desc *desc)
 
 	tmpDesc = desc;
 
-	while (1) {
+	while (1) 
+	{
 		/* update totalLen */
 		tmpDesc->totalLen = desc->totalLen;
 
